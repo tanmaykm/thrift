@@ -248,7 +248,7 @@ void t_jl_generator::generate_enum(t_enum* tenum) {
 	indent_down();
 	f_types_ << indent() << "end" << endl;
 
-	tenum->resolve_values();
+	// tenum->resolve_values();
 	f_types_ << indent() << "const " << enum_name << " = _enum_" << enum_name << "(";
 	bool first = true;
 	for (c_iter = constants.begin(); c_iter != constants.end(); ++c_iter) {
