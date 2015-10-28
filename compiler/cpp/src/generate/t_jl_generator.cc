@@ -158,7 +158,7 @@ string t_jl_generator::julia_type(t_type *type) {
 				return "Vector{UInt8}";
 			}
 			else {
-				return "AbstractString";
+				return "UTF8String";
 			}
 		case t_base_type::TYPE_BOOL:
 			return "Bool";
@@ -323,7 +323,7 @@ string t_jl_generator::render_const_value(t_type* type, t_const_value* value, bo
 				out << "convert(Vector{UInt8}, \"" << get_escaped_string(value) << "\")";
 			}
 			else {
-				out << '"' << get_escaped_string(value) << '"';
+				out << "utf8(\"" << get_escaped_string(value) << "\")";
 			}
 			break;
 		case t_base_type::TYPE_BOOL:
@@ -739,8 +739,8 @@ void t_jl_generator::generate_service_client(t_service* tservice) {
 		indent(f_service_) << endl;
 
 		indent(f_service_) << "(fname, mtype, rseqid) = readMessageBegin(p)" << endl;
-		indent(f_service_) << "(mtype == MessageType.EXCEPTION) && throw(read(p, TSTRUCT, TApplicationException()))" << endl;
-		indent(f_service_) << "outp = read(p, TSTRUCT, " << fname << "_result())" << endl;
+		indent(f_service_) << "(mtype == MessageType.EXCEPTION) && throw(read(p, TApplicationException()))" << endl;
+		indent(f_service_) << "outp = read(p, " << fname << "_result())" << endl;
 		indent(f_service_) << "readMessageEnd(p)" << endl;
 		indent(f_service_) << "(rseqid != c.seqid) && throw(TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, \"response sequence id $rseqid did not match request ($(c.seqid))\"))" << endl;
 
