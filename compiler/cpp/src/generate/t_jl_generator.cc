@@ -159,7 +159,7 @@ string t_jl_generator::julia_type(t_type *type) {
 				return "Vector{UInt8}";
 			}
 			else {
-				return "UTF8String";
+				return "Compat.UTF8String";
 			}
 		case t_base_type::TYPE_BOOL:
 			return "Bool";
@@ -211,7 +211,7 @@ string t_jl_generator::jl_autogen_comment() {
 string t_jl_generator::jl_imports() {
 	std::ostringstream out;
 
-	out << "using Thrift" << endl << "import Thrift.process, Thrift.meta, Thrift.distribute" << endl << endl;
+	out << "using Compat" << endl << "using Thrift" << endl << "import Thrift.process, Thrift.meta, Thrift.distribute" << endl << endl;
 
 	const vector<t_program*>& includes = program_->get_includes();
 	for (size_t i = 0; i < includes.size(); ++i) {
@@ -239,7 +239,7 @@ void t_jl_generator::close_generator() {
  * @param ttypedef The type definition
  */
 void t_jl_generator::generate_typedef(t_typedef* ttypedef) {
-	f_types_ << indent() << "typealias " << ttypedef->get_symbolic() << " ";
+	f_types_ << indent() << "const " << ttypedef->get_symbolic() << " = ";
 	t_type *t = ttypedef->get_type();
 	f_types_ << julia_type(t) << endl << endl;
 
@@ -324,7 +324,7 @@ string t_jl_generator::render_const_value(t_type* type, t_const_value* value, bo
 				out << "convert(Vector{UInt8}, \"" << get_escaped_string(value) << "\")";
 			}
 			else {
-				out << "utf8(\"" << get_escaped_string(value) << "\")";
+				out << "Compat.String(\"" << get_escaped_string(value) << "\")";
 			}
 			break;
 		case t_base_type::TYPE_BOOL:
@@ -722,7 +722,7 @@ void t_jl_generator::generate_service_client(t_service* tservice) {
 		f_types_ << endl << "abstract " << service_name_client << "Base" << endl;
 	}
 	else {
-		f_types_ << endl << "typealias " << service_name_client << "Base " << chk_keyword(extends_service->get_name()) << "ClientBase" << endl;
+		f_types_ << endl << "const " << service_name_client << "Base = " << chk_keyword(extends_service->get_name()) << "ClientBase" << endl;
 	}
 
 	f_service_ << "type " << service_name_client << " <: " << service_name_client << "Base" << endl;
