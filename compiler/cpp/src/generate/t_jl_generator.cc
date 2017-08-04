@@ -719,7 +719,7 @@ void t_jl_generator::generate_service_client(t_service* tservice) {
 
 	t_service* extends_service = tservice->get_extends();
 	if (extends_service == NULL) {
-		f_types_ << endl << "abstract type " << service_name_client << "Base end" << endl;
+		f_types_ << endl << "@compat abstract type " << service_name_client << "Base end" << endl;
 	}
 	else {
 		f_types_ << endl << "const " << service_name_client << "Base = " << chk_keyword(extends_service->get_name()) << "ClientBase" << endl;
