@@ -558,6 +558,8 @@ void t_jl_generator::generate_service_processor(t_service* tservice) {
 	indent(f_service_) << "p" << endl;
 	indent_down();
 	indent(f_service_) << "end" << endl;
+	indent_down();
+	f_service_ << "end # mutable struct " << service_name_ << "Processor" << endl;
 
 	for (f_iter = functions.begin(); f_iter != functions.end(); ++f_iter) {
 		t_function* tfunction = (*f_iter);
@@ -671,8 +673,6 @@ void t_jl_generator::generate_service_processor(t_service* tservice) {
 		}
 	}
 
-	indent_down();
-	f_service_ << "end # mutable struct " << service_name_ << "Processor" << endl;
 	f_service_ << "process(p::" << service_name_ << "Processor, inp::TProtocol, outp::TProtocol) = process(p.tp, inp, outp)" << endl;
 	f_service_ << "distribute(p::" << service_name_ << "Processor) = distribute(p.tp)" << endl;
 }
