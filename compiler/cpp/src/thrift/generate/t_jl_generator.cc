@@ -21,15 +21,15 @@ using std::vector;
 
 static const string endl = "\n";  // avoid ostream << std::endl flushes
 
-static const std::vector<string> julia_keywords = {
-	"if", "else", "elseif", "while", "for", "begin", "end", "quote",
-	"try", "catch", "return", "local", "abstract", "function", "macro",
-	"ccall", "finally", "typealias", "break", "continue", "type",
-	"global", "module", "using", "import", "export", "const", "let",
-	"bitstype", "do", "baremodule", "importall", "immutable", "struct",
-	"Type"
+static const char * _julia_keywords[] = {
+        "if", "else", "elseif", "while", "for", "begin", "end", "quote",
+        "try", "catch", "return", "local", "abstract", "function", "macro",
+        "ccall", "finally", "typealias", "break", "continue", "type",
+        "global", "module", "using", "import", "export", "const", "let",
+        "bitstype", "do", "baremodule", "importall", "immutable", "struct",
+        "Type"
 };
-
+static const std::vector<string> julia_keywords(_julia_keywords, _julia_keywords + 35);
 
 /**
  * Julia code generator.
